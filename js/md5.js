@@ -264,11 +264,22 @@
         return raw_hmac_md5(key, string);
     }
 
-    if (typeof define === 'function' && define.amd) {
-        define(function () {
-            return md5;
-        });
+    // check js environment
+    if (typeof(exports) !== 'undefined') {
+        // nodejs env
+        if (typeof module !== 'undefined' && module.exports) {
+            exports = module.exports = md5;
+        }
+        exports.md5 = md5;
     } else {
-        $.md5 = md5;
+        // requirejs env (optional)
+        if (typeof(define) === 'function' && define.amd) {
+            define(function () {
+                    return md5;
+                });
+        } else {
+            // browser env
+            $.md5 = md5;
+        }
     }
 }(this));
